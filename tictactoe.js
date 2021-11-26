@@ -14,7 +14,6 @@ var gameBoard = (() => {
 
 })()
 
-// module gamedisplay ?? part of game or solo??
 var gameDisplay = (() => {
     let createBoard = () => {
         let boardDom = document.getElementById("board");
@@ -25,8 +24,6 @@ var gameDisplay = (() => {
                 let boardIcon = document.createElement('i')
                 boardCol.classList.add("board-col-piece")
                 boardCol.addEventListener("click", boardPieceClick)
-                boardIcon.classList.add("fas")
-                boardIcon.classList.add("fa-times")
 
                 boardCol.appendChild(boardIcon)
                 boardRow.appendChild(boardCol);
@@ -34,7 +31,23 @@ var gameDisplay = (() => {
             }
         }
     }
-    let boardPieceClick = () => {}
+    function boardPieceClick() {
+            console.log(game.getPlayerTurn())
+        if (game.getPlayerTurn() == game.getPlayers().playerOne.getName()) {
+            this.children[0].classList.add("fas")
+            this.children[0].classList.add("fa-times")
+            game.setPlayerTurn(game.getPlayers().playerTwo.getName())
+            console.log(game.getPlayerTurn())
+        } else if(game.getPlayerTurn() == game.getPlayers().playerTwo.getName()) {
+            this.children[0].classList.add("far")
+            this.children[0].classList.add("fa-circle")
+            game.setPlayerTurn(game.getPlayers().playerOne.getName())
+        }
+        else {
+            game.setPlayerTurn(game.getPlayers().playerOne.getName())
+        }
+    }
+
     return {
         createBoard
     }
@@ -48,25 +61,42 @@ var player = (name) => {
         return name;
     }
     // play turn
-    let playTurn = () => {}
+    let playTurn = () => {
+        //set turn
+        game.setPlayerTurn(name)
+    }
 
     return {
-        getName
+        getName,
+        playTurn
     }
 }
 
 // module game
 var game = (() => {
+    let playerTurn = "-";
+    let players = {};
+
+    let getPlayers = () => {
+        return players
+    }
+    let setPlayerTurn = (playerName) => {
+        playerTurn = playerName
+    }
+    let getPlayerTurn = () => {
+        return playerTurn
+    }
     let start = () => {
-        //board init
         gameDisplay.createBoard()
-        //player init
-        let xPlayer = player("x");
-        let yPlayer = player("y");
+        players = {
+            playerOne: player("x"),
+            playerTwo: player("y")
+        }
+        console.log(players)
+        // console.log(getPlayers().)
 
         // while (true) {
         // turn
-        // xPlayer.playTurn();
         // if(gameBoard.checkBoard()){break;}
         // yPlayer.playTurn();
         // if(gameBoard.checkBoard()){break;}
@@ -75,7 +105,13 @@ var game = (() => {
         // start
         // winner
     }
-    return {start}
+    return {
+        start,
+        setPlayerTurn,
+        getPlayerTurn,
+        getPlayers
+    }
 })()
 
+// game.setPlayerTurn(game.getPlayers().playerOne.getName())
 game.start();

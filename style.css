@@ -3,3 +3,12 @@
     justify-content: center;
     align-items: center;
 }
+
+.board-col-piece {
+    border: 2px solid blue;
+    padding: 10px;
+}
+i {
+    width:10px;
+    height: 10px;
+}
