@@ -1,27 +1,52 @@
 // module gameboard
 var gameBoard = (() => {
     // array of board
-    let game = [
+    let board = [
         ['-', '-', '-'],
         ['-', '-', '-'],
         ['-', '-', '-']
     ];
     // add piece to board
+    let addBoardPiece = (row, col) => {
+        board[row][col] = game.getPlayerTurn();
+        console.log(board)
+    }
     // board check
-    let boardCheck = () => {
+    let boardCheck = (row, col) => {
+        console.log("boardCheck")
+        console.log("Me: " + row + " " + col)
+        let size = board.length - 1;
+        for (let rowCheck = -1; rowCheck <= 1; rowCheck++) {
+            for (let colCheck = -1; colCheck <= 1; colCheck++) {
+                if (((row + rowCheck) <= size && (row + rowCheck) >= 0) && ((col + colCheck) <= size && (col + colCheck) >= 0)) {
+                    if (!(rowCheck == 0) && (colCheck == 0)) {
+                        if (board[row + rowCheck][col + colCheck] == game.getPlayerTurn()) {
+                            console.log(`Neigh: ${row + rowCheck} ${col + colCheck}`)
+                            console.log(board[row + rowCheck][col + colCheck])
+                        }
+                    }
+                }
+            }
+        }
+
         return false;
     }
-
+    return {
+        boardCheck,
+        addBoardPiece
+    }
 })()
 
 var gameDisplay = (() => {
     let createBoard = () => {
         let boardDom = document.getElementById("board");
-        for (let row = 0; row < 3; row++) {
+        for (let col = 0; col < 3; col++) {
             let boardRow = document.createElement('div')
-            for (let col = 0; col < 3; col++) {
+            for (let row = 0; row < 3; row++) {
                 let boardCol = document.createElement('div')
                 let boardIcon = document.createElement('i')
+                boardCol.row = row;
+                boardCol.col = col;
                 boardCol.classList.add("board-col-piece")
                 boardCol.addEventListener("click", boardPieceClick)
 
@@ -31,19 +56,19 @@ var gameDisplay = (() => {
             }
         }
     }
+
     function boardPieceClick() {
-            console.log(game.getPlayerTurn())
+        gameBoard.addBoardPiece(this.row, this.col)
         if (game.getPlayerTurn() == game.getPlayers().playerOne.getName()) {
             this.children[0].classList.add("fas")
             this.children[0].classList.add("fa-times")
+            gameBoard.boardCheck(this.row, this.col) ? game.winner(game.getPlayers().playerOne) : ""
+            // check if valid click
             game.setPlayerTurn(game.getPlayers().playerTwo.getName())
-            console.log(game.getPlayerTurn())
-        } else if(game.getPlayerTurn() == game.getPlayers().playerTwo.getName()) {
+        } else if (game.getPlayerTurn() == game.getPlayers().playerTwo.getName()) {
             this.children[0].classList.add("far")
             this.children[0].classList.add("fa-circle")
-            game.setPlayerTurn(game.getPlayers().playerOne.getName())
-        }
-        else {
+            gameBoard.boardCheck(this.row, this.col) ? game.winner(game.getPlayers().playerTwo) : ""
             game.setPlayerTurn(game.getPlayers().playerOne.getName())
         }
     }
@@ -90,20 +115,17 @@ var game = (() => {
         gameDisplay.createBoard()
         players = {
             playerOne: player("x"),
-            playerTwo: player("y")
+            playerTwo: player("o")
         }
-        console.log(players)
-        // console.log(getPlayers().)
+        //set turn of first player
+        game.setPlayerTurn(game.getPlayers().playerOne.getName())
 
-        // while (true) {
-        // turn
-        // if(gameBoard.checkBoard()){break;}
-        // yPlayer.playTurn();
-        // if(gameBoard.checkBoard()){break;}
-        // }
         // reset
         // start
         // winner
+    }
+    let winner = (playerWin) => {
+
     }
     return {
         start,
@@ -113,5 +135,4 @@ var game = (() => {
     }
 })()
 
-// game.setPlayerTurn(game.getPlayers().playerOne.getName())
 game.start();
