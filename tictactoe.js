@@ -16,13 +16,53 @@ var gameBoard = (() => {
         console.log("boardCheck")
         console.log("Me: " + row + " " + col)
         let size = board.length - 1;
+
         for (let rowCheck = -1; rowCheck <= 1; rowCheck++) {
             for (let colCheck = -1; colCheck <= 1; colCheck++) {
-                if (((row + rowCheck) <= size && (row + rowCheck) >= 0) && ((col + colCheck) <= size && (col + colCheck) >= 0)) {
-                    if (!(rowCheck == 0) && (colCheck == 0)) {
-                        if (board[row + rowCheck][col + colCheck] == game.getPlayerTurn()) {
-                            console.log(`Neigh: ${row + rowCheck} ${col + colCheck}`)
-                            console.log(board[row + rowCheck][col + colCheck])
+                let rowNeighbor = row + rowCheck;
+                let colNeighbor = col + colCheck;
+                if ((rowNeighbor <= size && rowNeighbor >= 0) && (colNeighbor <= size && colNeighbor >= 0)) {
+                    if (!((rowCheck == 0) && (colCheck == 0))) {
+                        if (board[rowNeighbor][colNeighbor] == game.getPlayerTurn()) {
+                            console.log(`Neigh: ${rowNeighbor} ${colNeighbor}`)
+                            console.log(board[rowNeighbor][colNeighbor])
+                            //check if third piece
+                            let thirdPieceRow = -1;
+                            let thirdPieceCol = -1;
+                            // 1 or 2 
+                            if (row == rowNeighbor) {
+                                console.log("same row")
+                                thirdPieceRow = row;
+                                if (col == 0|| colNeighbor == 0 ) {
+                                    if (col == 1|| colNeighbor == 1 ) {
+                                        thirdPieceCol = 2;
+                                    } else {
+                                        thirdPieceCol = 1;
+                                    }
+                                } else {
+                                    thirdPieceCol = 0;
+                                }
+                            } else if (col == colNeighbor) {
+                                console.log("same col")
+                                console.log(`Rows: ${row} ${rowNeighbor}`)
+                                thirdPieceCol = col;
+                                if (row == 0|| rowNeighbor== 0)  {
+                                    if (row == 1|| rowNeighbor== 1)  {
+                                        thirdPieceRow = 2;
+                                    } else {
+                                        thirdPieceRow = 1;
+                                    }
+                                } else {
+                                    thirdPieceRow = 0;
+                                }
+                            }
+                            console.log(`Third Piece: r${thirdPieceRow} c${thirdPieceCol}`)
+                            if (thirdPieceCol == -1 || thirdPieceRow == -1) {
+                                return false;
+                            } 
+                            else if(board[thirdPieceRow][thirdPieceCol] == game.getPlayerTurn()) {
+                                return true;
+                            }
                         }
                     }
                 }
@@ -62,7 +102,7 @@ var gameDisplay = (() => {
         if (game.getPlayerTurn() == game.getPlayers().playerOne.getName()) {
             this.children[0].classList.add("fas")
             this.children[0].classList.add("fa-times")
-            gameBoard.boardCheck(this.row, this.col) ? game.winner(game.getPlayers().playerOne) : ""
+            gameBoard.boardCheck(this.row, this.col) ? game.winner(game.getPlayers().playerOne) : console.log("No Winner")
             // check if valid click
             game.setPlayerTurn(game.getPlayers().playerTwo.getName())
         } else if (game.getPlayerTurn() == game.getPlayers().playerTwo.getName()) {
@@ -125,13 +165,14 @@ var game = (() => {
         // winner
     }
     let winner = (playerWin) => {
-
+        console.log("Winner: " + playerWin.getName())
     }
     return {
         start,
         setPlayerTurn,
         getPlayerTurn,
-        getPlayers
+        getPlayers, 
+        winner
     }
 })()
 
