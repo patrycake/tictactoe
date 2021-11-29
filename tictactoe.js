@@ -53,7 +53,7 @@ var gameDisplay = (() => {
                 boardCol.col = col;
                 boardCol.classList.add("board-col-piece")
                 boardCol.addEventListener("click", boardPieceClick)
-
+                boardCol.id = `r${row}c${col}`;
                 boardCol.appendChild(boardIcon)
                 boardRow.appendChild(boardCol);
                 boardDom.appendChild(boardRow)

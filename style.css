@@ -6,9 +6,35 @@
 
 .board-col-piece {
     border: 2px solid blue;
-    padding: 10px;
+    width: 50px;
+    height: 50px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    /* text-align: center; */
+    /* padding: 10px; */
 }
-i {
-    width:10px;
-    height: 10px;
+
+#r0c0,
+#r0c1,
+#r0c2 {
+    border-top: none;
+}
+
+#r2c0,
+#r2c1,
+#r2c2 {
+    border-bottom: none;
+}
+
+#r0c0,
+#r1c0,
+#r2c0 {
+    border-left: none;
+}
+
+#r0c2,
+#r1c2,
+#r2c2 {
+    border-right: none;
 }
