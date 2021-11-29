@@ -6,8 +6,10 @@ var gameBoard = (() => {
         ['-', '-', '-']
     ];
     let addBoardPiece = (row, col) => {
+        if (board[row][col] != "-") return false;
         board[row][col] = game.getPlayerTurn().getName();
         console.log(board)
+        return true;
     }
     let boardCheck = (row, col) => {
         console.log("boardCheck")
@@ -62,15 +64,16 @@ var gameDisplay = (() => {
     }
 
     function boardPieceClick() {
-        gameBoard.addBoardPiece(this.row, this.col)
-        this.children[0].classList.add(game.getPlayerTurn().getClassListIcon().firstClass)
-        this.children[0].classList.add(game.getPlayerTurn().getClassListIcon().secondClass)
-        gameBoard.boardCheck(this.row, this.col) ? game.winner(game.getPlayerTurn()) : console.log("No Winner")
-        // check if valid click
-        if (game.getPlayers().playerOne.getName() == game.getPlayerTurn().getName()) {
-            game.setPlayerTurn(game.getPlayers().playerTwo)
-        } else {
-            game.setPlayerTurn(game.getPlayers().playerOne)
+        if (gameBoard.addBoardPiece(this.row, this.col)) {
+            this.children[0].classList.add(game.getPlayerTurn().getClassListIcon().firstClass)
+            this.children[0].classList.add(game.getPlayerTurn().getClassListIcon().secondClass)
+            gameBoard.boardCheck(this.row, this.col) ? game.winner(game.getPlayerTurn()) : console.log("No Winner")
+
+            if (game.getPlayers().playerOne.getName() == game.getPlayerTurn().getName()) {
+                game.setPlayerTurn(game.getPlayers().playerTwo)
+            } else {
+                game.setPlayerTurn(game.getPlayers().playerOne)
+            }
         }
 
     }
