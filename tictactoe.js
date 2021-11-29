@@ -1,4 +1,3 @@
-// module gameboard
 var gameBoard = (() => {
     // array of board
     let board = [
@@ -6,12 +5,10 @@ var gameBoard = (() => {
         ['-', '-', '-'],
         ['-', '-', '-']
     ];
-    // add piece to board
     let addBoardPiece = (row, col) => {
-        board[row][col] = game.getPlayerTurn();
+        board[row][col] = game.getPlayerTurn().getName();
         console.log(board)
     }
-    // board check
     let boardCheck = (row, col) => {
         console.log("boardCheck")
         console.log("Me: " + row + " " + col)
@@ -23,44 +20,20 @@ var gameBoard = (() => {
                 let colNeighbor = col + colCheck;
                 if ((rowNeighbor <= size && rowNeighbor >= 0) && (colNeighbor <= size && colNeighbor >= 0)) {
                     if (!((rowCheck == 0) && (colCheck == 0))) {
-                        if (board[rowNeighbor][colNeighbor] == game.getPlayerTurn()) {
-                            console.log(`Neigh: ${rowNeighbor} ${colNeighbor}`)
-                            console.log(board[rowNeighbor][colNeighbor])
-                            //check if third piece
+                        if (board[rowNeighbor][colNeighbor] == game.getPlayerTurn().getName()) {
                             let thirdPieceRow = -1;
                             let thirdPieceCol = -1;
-                            // 1 or 2 
                             if (row == rowNeighbor) {
-                                console.log("same row")
                                 thirdPieceRow = row;
-                                if (col == 0|| colNeighbor == 0 ) {
-                                    if (col == 1|| colNeighbor == 1 ) {
-                                        thirdPieceCol = 2;
-                                    } else {
-                                        thirdPieceCol = 1;
-                                    }
-                                } else {
-                                    thirdPieceCol = 0;
-                                }
+                                thirdPieceCol = getThirdPiece(col, colNeighbor)
                             } else if (col == colNeighbor) {
-                                console.log("same col")
-                                console.log(`Rows: ${row} ${rowNeighbor}`)
                                 thirdPieceCol = col;
-                                if (row == 0|| rowNeighbor== 0)  {
-                                    if (row == 1|| rowNeighbor== 1)  {
-                                        thirdPieceRow = 2;
-                                    } else {
-                                        thirdPieceRow = 1;
-                                    }
-                                } else {
-                                    thirdPieceRow = 0;
-                                }
+                                thirdPieceRow = getThirdPiece(row, rowNeighbor)
                             }
-                            console.log(`Third Piece: r${thirdPieceRow} c${thirdPieceCol}`)
                             if (thirdPieceCol == -1 || thirdPieceRow == -1) {
+                                // diagonal?!
                                 return false;
-                            } 
-                            else if(board[thirdPieceRow][thirdPieceCol] == game.getPlayerTurn()) {
+                            } else if (board[thirdPieceRow][thirdPieceCol] == game.getPlayerTurn().getName()) {
                                 return true;
                             }
                         }
@@ -68,8 +41,20 @@ var gameBoard = (() => {
                 }
             }
         }
-
         return false;
+    }
+    function getThirdPiece(position, pNeighbor){
+        let thirdPiece = -1;
+        if (position == 0 || pNeighbor == 0) {
+            if (position == 1 || pNeighbor == 1) {
+                thirdPiece = 2;
+            } else {
+                thirdPiece = 1;
+            }
+        } else {
+            thirdPiece = 0;
+        }
+        return thirdPiece;
     }
     return {
         boardCheck,
@@ -99,18 +84,16 @@ var gameDisplay = (() => {
 
     function boardPieceClick() {
         gameBoard.addBoardPiece(this.row, this.col)
-        if (game.getPlayerTurn() == game.getPlayers().playerOne.getName()) {
-            this.children[0].classList.add("fas")
-            this.children[0].classList.add("fa-times")
-            gameBoard.boardCheck(this.row, this.col) ? game.winner(game.getPlayers().playerOne) : console.log("No Winner")
-            // check if valid click
-            game.setPlayerTurn(game.getPlayers().playerTwo.getName())
-        } else if (game.getPlayerTurn() == game.getPlayers().playerTwo.getName()) {
-            this.children[0].classList.add("far")
-            this.children[0].classList.add("fa-circle")
-            gameBoard.boardCheck(this.row, this.col) ? game.winner(game.getPlayers().playerTwo) : ""
-            game.setPlayerTurn(game.getPlayers().playerOne.getName())
+        this.children[0].classList.add(game.getPlayerTurn().getClassListIcon().firstClass)
+        this.children[0].classList.add(game.getPlayerTurn().getClassListIcon().secondClass)
+        gameBoard.boardCheck(this.row, this.col) ? game.winner(game.getPlayerTurn()) : console.log("No Winner")
+        // check if valid click
+        if (game.getPlayers().playerOne.getName() == game.getPlayerTurn().getName()) {
+            game.setPlayerTurn(game.getPlayers().playerTwo)
+        } else {
+            game.setPlayerTurn(game.getPlayers().playerOne)
         }
+
     }
 
     return {
@@ -120,33 +103,34 @@ var gameDisplay = (() => {
 //dom manip
 
 // factory player
-var player = (name) => {
+var player = (name, classLI) => {
+    //class list
+    let classListIcon = classLI;
+
+    let getClassListIcon = () => {return classListIcon};
     // name 
     const getName = () => {
         return name;
     }
-    // play turn
-    let playTurn = () => {
-        //set turn
-        game.setPlayerTurn(name)
-    }
+    let playTurn = () => game.setPlayerTurn(this)
 
     return {
         getName,
-        playTurn
+        playTurn,
+        getClassListIcon
     }
 }
 
 // module game
 var game = (() => {
-    let playerTurn = "-";
+    let playerTurn = {};
     let players = {};
 
     let getPlayers = () => {
         return players
     }
-    let setPlayerTurn = (playerName) => {
-        playerTurn = playerName
+    let setPlayerTurn = (player) => {
+        playerTurn = player
     }
     let getPlayerTurn = () => {
         return playerTurn
@@ -154,11 +138,17 @@ var game = (() => {
     let start = () => {
         gameDisplay.createBoard()
         players = {
-            playerOne: player("x"),
-            playerTwo: player("o")
+            playerOne: player("x", {
+                firstClass: "fas",
+                secondClass: "fa-times"
+            }),
+            playerTwo: player("o", {
+                firstClass: "far",
+                secondClass: "fa-circle"
+            })
         }
         //set turn of first player
-        game.setPlayerTurn(game.getPlayers().playerOne.getName())
+        game.setPlayerTurn(game.getPlayers().playerOne)
 
         // reset
         // start
@@ -171,7 +161,7 @@ var game = (() => {
         start,
         setPlayerTurn,
         getPlayerTurn,
-        getPlayers, 
+        getPlayers,
         winner
     }
 })()
