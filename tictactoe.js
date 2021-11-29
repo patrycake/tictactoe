@@ -35,19 +35,6 @@ var gameBoard = (() => {
         return false;
     }
 
-    function getThirdPiece(position, pNeighbor) {
-        let thirdPiece = -1;
-        if (position == 0 || pNeighbor == 0) {
-            if (position == 1 || pNeighbor == 1) {
-                thirdPiece = 2;
-            } else {
-                thirdPiece = 1;
-            }
-        } else {
-            thirdPiece = 0;
-        }
-        return thirdPiece;
-    }
     return {
         boardCheck,
         addBoardPiece
