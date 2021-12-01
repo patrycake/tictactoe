@@ -44,23 +44,14 @@ var gameBoard = (() => {
 })()
 
 var gameDisplay = (() => {
-    let createBoard = () => {
-        let boardDom = document.getElementById("board");
-        for (let col = 0; col < 3; col++) {
-            let boardRow = document.createElement('div')
-            for (let row = 0; row < 3; row++) {
-                let boardCol = document.createElement('div')
-                let boardIcon = document.createElement('i')
-                boardCol.row = row;
-                boardCol.col = col;
-                boardCol.classList.add("board-col-piece")
-                boardCol.addEventListener("click", boardPieceClick)
-                boardCol.id = `r${row}c${col}`;
-                boardCol.appendChild(boardIcon)
-                boardRow.appendChild(boardCol);
-                boardDom.appendChild(boardRow)
-            }
-        }
+    let createBoardListener = () => {
+        let boardDom = document.getElementsByClassName("board-col-piece")
+        Array.from(boardDom).forEach(boardSpace => {
+            boardSpace.addEventListener("click", boardPieceClick)
+            boardSpace.row = boardSpace.id.slice(1,2)
+            boardSpace.col = boardSpace.id.slice(3)
+            console.log(`${boardSpace.row} ${boardSpace.col}`)
+        })
     }
 
     function boardPieceClick() {
@@ -79,20 +70,16 @@ var gameDisplay = (() => {
     }
 
     return {
-        createBoard
+         createBoardListener
     }
 })()
-//dom manip
 
-// factory player
 var player = (name, classLI) => {
-    //class list
     let classListIcon = classLI;
 
     let getClassListIcon = () => {
         return classListIcon
     };
-    // name 
     const getName = () => {
         return name;
     }
@@ -105,7 +92,6 @@ var player = (name, classLI) => {
     }
 }
 
-// module game
 var game = (() => {
     let playerTurn = {};
     let players = {};
@@ -120,7 +106,7 @@ var game = (() => {
         return playerTurn
     }
     let start = () => {
-        gameDisplay.createBoard()
+        gameDisplay.createBoardListener()
         players = {
             playerOne: player("x", {
                 firstClass: "fas",
@@ -135,8 +121,6 @@ var game = (() => {
         game.setPlayerTurn(game.getPlayers().playerOne)
 
         // reset
-        // start
-        // winner
     }
     let winner = (playerWin) => {
         console.log("Winner: " + playerWin.getName())
