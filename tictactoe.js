@@ -54,7 +54,14 @@ var gameBoard = (() => {
 })()
 
 var gameDisplay = (() => {
+    let resetButton = () => {
+        document.getElementById("reset").addEventListener("click", () => {
+            window.location.reload();
+        })
+    }
+
     let createBoardListener = () => {
+        resetButton();
         let boardDom = document.getElementsByClassName("board-col-piece")
         Array.from(boardDom).forEach(boardSpace => {
             boardSpace.addEventListener("click", boardPieceClick)
@@ -72,8 +79,13 @@ var gameDisplay = (() => {
             this.classList.remove("board-col-piece-hover")
 
             if (gameBoard.boardWin(this.row, this.col)) {
+                let boardDom = document.getElementsByClassName("board-col-piece")
+                Array.from(boardDom).forEach(boardSpace => {
+                    boardSpace.classList.remove("board-col-piece-hover")
+                    boardSpace.removeEventListener("click", boardPieceClick)
+                })
                 game.winner(game.getPlayerTurn())
-                // remove hover for all the other places
+
                 // dont allow click on the other places
 
             } else if (gameBoard.boardTie()) {
@@ -151,10 +163,9 @@ var game = (() => {
         } else if (playerWin.getName() == "o") {
             resultText = "Player Two Wins!";
         }
-
         document.getElementById("result").innerText = resultText;
-        console.log(resultText)
     }
+
     return {
         start,
         setPlayerTurn,
