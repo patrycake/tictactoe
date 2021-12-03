@@ -8,29 +8,58 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
         integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-        <link rel="preconnect" href="https://fonts.googleapis.com"> 
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
-        <link href="https://fonts.googleapis.com/css2?family=Gorditas:wght@700&family=Nixie+One&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gorditas:wght@700&family=Nixie+One&display=swap"
+        rel="stylesheet">
     <script src="tictactoe.js" defer></script>
     <title>Tic Tac Toe</title>
 </head>
 
 <body>
+    <div id="all-images-overlay">
+        <img src="img/caramelized-apple.png" alt="" ><!--style="top:150px; left:700px"-->
+        <img src="img/carnival.png" alt="" >
+        <img src="img/clown.png" alt="" srcset="">
+        <img src="img/confetti.png" alt="" srcset="" >
+        <img src="img/cotton-candy.png" alt="" srcset="">
+        <img src="img/crystal-ball.png" alt="" srcset="">
+        <img src="img/fireworks.png" alt="" srcset="">
+        <img src="img/flags.png" alt="" srcset="">
+        <img src="img/glasses-with-mustache.png" alt="" srcset="">
+        <img src="img/hot-air-balloon.png" alt="" srcset="">
+        <img src="img/ice-cream-cone.png" alt="" srcset="">
+        <img src="img/popcorn.png" alt="" srcset="">
+        <img src="img/ring-of-fire.png" alt="" srcset="">
+        <img src="img/ticket.png" alt="" srcset="">
+        <img src="img/unicycle.png" alt="" srcset="">
+    </div>
     <header>
         <h1 id="one">Tic Tac Toe .</h1>
+        <p id="result">Player One's Turn</p>
     </header>
-    <div id="choose-players">
-    </div>
-    <div id="board">
-        <div class="board-col-piece" id="r0c0"><i></i></div>
-        <div class="board-col-piece" id="r0c1"><i></i></div>
-        <div class="board-col-piece" id="r0c2"><i></i></div>
-        <div class="board-col-piece" id="r1c0"><i></i></div>
-        <div class="board-col-piece" id="r1c1"><i></i></div>
-        <div class="board-col-piece" id="r1c2"><i></i></div>
-        <div class="board-col-piece" id="r2c0"><i></i></div>
-        <div class="board-col-piece" id="r2c1"><i></i></div>
-        <div class="board-col-piece" id="r2c2"><i></i></div>
+    
+    <div class="main">
+        <div id="player-one" class="score-board">
+            <h2>Player One</h2>
+            
+            <img src="img/glasses-with-mustache.png" alt="">
+        </div>
+        <div id="board">
+            <div class="board-col-piece board-col-piece-hover" id="r0c0"></div>
+            <div class="board-col-piece board-col-piece-hover" id="r0c1"></div>
+            <div class="board-col-piece board-col-piece-hover" id="r0c2"></div>
+            <div class="board-col-piece board-col-piece-hover" id="r1c0"></div>
+            <div class="board-col-piece board-col-piece-hover" id="r1c1"></div>
+            <div class="board-col-piece board-col-piece-hover" id="r1c2"></div>
+            <div class="board-col-piece board-col-piece-hover" id="r2c0"></div>
+            <div class="board-col-piece board-col-piece-hover" id="r2c1"></div>
+            <div class="board-col-piece board-col-piece-hover" id="r2c2"></div>
+        </div>
+        <div id="player-two" class="score-board">
+            <h2>Player Two</h2>
+            <img src="img/carnival.png" alt="">
+        </div>
     </div>
     <footer>
         <div>Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a

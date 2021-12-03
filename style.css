@@ -1,19 +1,66 @@
-html,body {
+html,
+body,
+#all-images-overlay {
     margin: 0;
-    background-color: #C8EFFE;
     width: 100%;
     height: 100%;
+    background-color: transparent;
+}
+
+html,
+body {
     display: flex;
     flex-direction: column;
-    /* justify-content: ; */
     align-items: center;
+}
+
+#all-images-overlay {
+    background-color: #C8EFFE;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    opacity: .3;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    padding: 150px 100px;
+}
+
+#all-images-overlay img {
+    width: 50px;
+    height: 50px;
+    position: relative;
 }
 
 #one {
     font-family: 'Gorditas', cursive;
     font-size: 5em;
-    /* text-align: center; */
     color: #AA9EA8;
+}
+p {
+    font-family: 'Gorditas', cursive;
+    font-size: 2em;
+    text-align: center;
+    color:  #FD8383;
+}
+
+.main {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    height: 100%;
+    margin: 50px;
+}
+
+a {
+    text-decoration: none;
+    color: #AA9EA8;
+}
+
+a:hover {
+    color: #FD8383;
 }
 
 footer {
@@ -23,48 +70,51 @@ footer {
     background-color: #FFF9E2;
     width: 100%;
     padding: 20px;
+    color: #AA9EA8;
 }
 
-#choose-players {
-    /* visibility: none; */
+.score-board {
+    border-radius: 8px;
+    background-color: #FFF9E2;
+    box-shadow: 0 0 30px 10px rgb(170, 158, 168, 0.5);
+    padding: 20px;
+    margin: 10px;
+    font-family: 'Nixie One', cursive;
+    color: #FD8383;
+    text-align: center;
+    border: 5px dotted #FD8383;
+    height: 200px;
+    
 }
+
+.score-board img {
+    width: 60px;
+    height: 60px;
+}
+
 #board {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    height: 200px;
 }
+
+.board-col-piece img {
+    width: 40px;
+    height: 40px;
+}
+
 .board-col-piece {
-    
-    /* border: 2px solid #FD8383; */
-    width: 50px;
-    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* border: 5px dotted #FD8383; */
+    width: 80px;
+    height: 80px;
     background-color: rgb(170, 158, 168, 0.5);
     margin: 10px;
     border-radius: 8px;
 }
-.board-col-piece:hover{
+
+.board-col-piece-hover:hover {
     background-color: rgb(170, 158, 168);
-}
-
-#r0c0,
-#r0c1,
-#r0c2 {
-    border-top: none;
-}
-
-#r2c0,
-#r2c1,
-#r2c2 {
-    border-bottom: none;
-}
-
-#r0c0,
-#r1c0,
-#r2c0 {
-    border-left: none;
-}
-
-#r0c2,
-#r1c2,
-#r2c2 {
-    border-right: none;
 }

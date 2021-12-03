@@ -5,13 +5,22 @@ var gameBoard = (() => {
         ['-', '-', '-'],
         ['-', '-', '-']
     ];
+
     let addBoardPiece = (row, col) => {
         if (board[row][col] != "-") return false;
         board[row][col] = game.getPlayerTurn().getName();
         console.log(board)
         return true;
     }
-    let boardCheck = (row, col) => {
+
+    let boardTie = () => {
+        console.log("Check Tie")
+        return !board[0].includes("-") &&
+            !board[1].includes("-") &&
+            !board[2].includes("-")
+    }
+
+    let boardWin = (row, col) => {
         console.log("boardCheck")
         console.log("Me: " + row + " " + col)
         let size = board.length - 1;
@@ -38,7 +47,8 @@ var gameBoard = (() => {
     }
 
     return {
-        boardCheck,
+        boardWin,
+        boardTie,
         addBoardPiece
     }
 })()
@@ -48,47 +58,63 @@ var gameDisplay = (() => {
         let boardDom = document.getElementsByClassName("board-col-piece")
         Array.from(boardDom).forEach(boardSpace => {
             boardSpace.addEventListener("click", boardPieceClick)
-            boardSpace.row = boardSpace.id.slice(1,2)
+            boardSpace.row = boardSpace.id.slice(1, 2)
             boardSpace.col = boardSpace.id.slice(3)
-            console.log(`${boardSpace.row} ${boardSpace.col}`)
         })
     }
 
     function boardPieceClick() {
         if (gameBoard.addBoardPiece(this.row, this.col)) {
-            this.children[0].classList.add(game.getPlayerTurn().getClassListIcon().firstClass)
-            this.children[0].classList.add(game.getPlayerTurn().getClassListIcon().secondClass)
-            gameBoard.boardCheck(this.row, this.col) ? game.winner(game.getPlayerTurn()) : console.log("No Winner")
+            let piece = document.createElement("img");
+            let result = document.getElementById("result")
+            piece.src = game.getPlayerTurn().getImageSrc();
+            this.appendChild(piece)
+            this.classList.remove("board-col-piece-hover")
 
-            if (game.getPlayers().playerOne.getName() == game.getPlayerTurn().getName()) {
-                game.setPlayerTurn(game.getPlayers().playerTwo)
+            if (gameBoard.boardWin(this.row, this.col)) {
+                game.winner(game.getPlayerTurn())
+                // remove hover for all the other places
+                // dont allow click on the other places
+
+            } else if (gameBoard.boardTie()) {
+                result.innerText = "It's a Draw"
             } else {
-                game.setPlayerTurn(game.getPlayers().playerOne)
+                if (game.getPlayers().playerOne.getName() == game.getPlayerTurn().getName()) {
+                    game.setPlayerTurn(game.getPlayers().playerTwo)
+                    result.innerText = "Player Two's Turn"
+                } else {
+                    game.setPlayerTurn(game.getPlayers().playerOne)
+                    result.innerText = "Player One's Turn"
+                }
             }
         }
-
     }
 
+
     return {
-         createBoardListener
+        createBoardListener
     }
 })()
 
-var player = (name, classLI) => {
-    let classListIcon = classLI;
+var player = (name, imgSrc, scoreN) => {
+    let imageSrc = imgSrc;
+    let scoreName = scoreN;
 
-    let getClassListIcon = () => {
-        return classListIcon
+    let getImageSrc = () => {
+        return imageSrc;
     };
     const getName = () => {
         return name;
     }
     let playTurn = () => game.setPlayerTurn(this)
-
+    let getScoreName = () => {
+        return scoreName;
+    }
     return {
         getName,
         playTurn,
-        getClassListIcon
+        getImageSrc,
+        getScoreName
     }
 }
 
@@ -108,22 +134,26 @@ var game = (() => {
     let start = () => {
         gameDisplay.createBoardListener()
         players = {
-            playerOne: player("x", {
-                firstClass: "fas",
-                secondClass: "fa-times"
-            }),
-            playerTwo: player("o", {
-                firstClass: "far",
-                secondClass: "fa-circle"
-            })
+            playerOne: player("x", "img/glasses-with-mustache.png", "player-one"),
+            playerTwo: player("o", "img/carnival.png", "player-two")
         }
         //set turn of first player
         game.setPlayerTurn(game.getPlayers().playerOne)
 
         // reset
     }
-    let winner = (playerWin) => {
+
+    function winner(playerWin) {
+        let resultText = "";
         console.log("Winner: " + playerWin.getName())
+        if (playerWin.getName() == "x") {
+            resultText = "Player One Wins!"
+        } else if (playerWin.getName() == "o") {
+            resultText = "Player Two Wins!";
+        }
+
+        document.getElementById("result").innerText = resultText;
+        console.log(resultText)
     }
     return {
         start,
